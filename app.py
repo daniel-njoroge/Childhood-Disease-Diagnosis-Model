@@ -2,7 +2,6 @@
 from flask import Flask, request, render_template
 import pandas as pd
 import joblib
-import json
 
 app = Flask(__name__)
 
@@ -20,22 +19,19 @@ def home():
     selected_symptoms = []
     
     if request.method == 'POST':
-        # Get selected symptoms
         selected_symptoms = request.form.getlist('symptoms')
-        
-        
-        input_data = pd.DataFrame(0, index=[0], columns=symptoms)
-        for symptom in selected_symptoms:
-            if symptom in input_data.columns:
-                input_data[symptom] = 1
-        
-        # Predict
-        prediction = model.predict(input_data)
-        disease = le.inverse_transform(prediction)[0]
-        result = {
-            'disease': disease,
-            'symptoms': selected_symptoms
-        }
+        if not selected_symptoms:
+            result = {'disease': 'Please select at least one symptom', 'symptoms': []}
+        else:
+            # Create input
+            input_data = pd.DataFrame(0, index=[0], columns=symptoms)
+            for symptom in selected_symptoms:
+                if symptom in input_data.columns:
+                    input_data[symptom] = 1
+            # Predict
+            prediction = model.predict(input_data)
+            disease = le.inverse_transform(prediction)[0]
+            result = {'disease': disease, 'symptoms': selected_symptoms}
     
     return render_template('index.html', symptoms=symptoms, result=result)
 
