@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Childhood Disease Diagnosis</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        h1 { color: navy; }
+        .symptom-list { max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; }
+        button { margin-top: 10px; padding: 8px; background: navy; color: white; border: none; }
+        #result { margin-top: 20px; display: none; }
+        #result.show { display: block; }
+    </style>
+</head>
+<body>
+    <h1>Childhood Disease Diagnosis</h1>
+    <p>Check symptoms and click Predict.</p>
+    <p><strong>Disclaimer:</strong> For educational use only. Consult a doctor.</p>
+    
+    <form method="POST">
+        <div class="symptom-list">
+            {% for symptom in symptoms %}
+                <input type="checkbox" name="symptoms" value="{{ symptom }}"> {{ symptom }}<br>
+            {% endfor %}
+        </div>
+        <button type="submit">Predict</button>
+    </form>
+    
+    {% if result %}
+        <div id="result" class="show">
+            <h3>Result</h3>
+            <p><strong>Selected Symptoms:</strong> {{ result.symptoms|join(', ') }}</p>
+            <p><strong>Predicted Disease:</strong> {{ result.disease }}</p>
+        </div>
+    {% endif %}
+</body>
+</html>
