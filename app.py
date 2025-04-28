@@ -1,15 +1,14 @@
-# File: app.py
 from flask import Flask, request, render_template
 import pandas as pd
 import joblib
 
 app = Flask(__name__)
 
-# Load model and label encoder
+
 model = joblib.load('childhood_disease_model.pkl')
 le = joblib.load('label_encoder.pkl')
 
-# Load dataset to get symptom names
+
 data = pd.read_csv('Filtered_Childhood_Dataset.csv')
 symptoms = data.columns[:-1].tolist()
 
